@@ -1,0 +1,21 @@
+{
+  "name": "fetin-creditcontrol",
+  "version": "1.0.0",
+  "description": "Fetin 2023 credit control project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "webapp": "cd webapp && npm run dev",
+    "api": "cd api && npm run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FranciscoGSilverio/Fetin-CreditControl.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FranciscoGSilverio/Fetin-CreditControl/issues"
+  },
+  "homepage": "https://github.com/FranciscoGSilverio/Fetin-CreditControl#readme"
+}
