@@ -5,7 +5,7 @@ const Nav = styled.nav`
   color: #dde6ed;
   width: 100vw;
   height: 70px;
-  padding: 8px 20px;
+  padding: 8px 5%;
   background-color: #27374d;
   position: fixed;
   top: 0;
