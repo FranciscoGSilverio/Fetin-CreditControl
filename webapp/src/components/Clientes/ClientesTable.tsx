@@ -1,36 +1,45 @@
-import React from "react";
 import { Table } from "reactstrap";
+import { BsCheck } from "react-icons/bs";
+import { BiErrorCircle } from "react-icons/bi";
+import { formatDate } from "../../utils/formatDate";
+type TableProps = {
+  data: any[];
+};
 
-const ClientesTable = () => {
+const ClientesTable = ({ data }: TableProps) => {
   return (
-    <Table>
+    <Table style={{ fontSize: "0.95rem" }}>
       <thead>
         <tr>
-          <th>#</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Username</th>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Cliente desde</th>
+          <th>Compras efetuadas</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>Larry</td>
-          <td>the Bird</td>
-          <td>@twitter</td>
-        </tr>
+        {data &&
+          data.map((client) => {
+            const { day, month, year } = formatDate(client.createdAt);
+            const formatedDate = `${day}/${month}/${year}`;
+
+            return (
+              <tr key={client.clientId}>
+                <td>{client.name}</td>
+                <td>{client.email}</td>
+                <td>{formatedDate}</td>
+                <td>{client.purchases.length}</td>
+                <td>
+                  {client.isPaymentPending ? (
+                    <BiErrorCircle size={25} className="text-warning" />
+                  ) : (
+                    <BsCheck size={25} className="text-success" />
+                  )}
+                </td>
+              </tr>
+            );
+          })}
       </tbody>
     </Table>
   );
