@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "webapp": "cd webapp && npm run dev",
-    "api": "cd api && npm run start:dev",
+    "api": "cd api && npm start",
+    "api:dev": "cd api && npm run start:dev",
     "app": "npm run webapp & npm run api"
   },
   "repository": {
@@ -18,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/FranciscoGSilverio/Fetin-CreditControl/issues"
   },
-  "homepage": "https://github.com/FranciscoGSilverio/Fetin-CreditControl#readme"
+  "homepage": "https://github.com/FranciscoGSilverio/Fetin-CreditControl#readme",
+  "dependencies": {
+    "formik": "^2.4.1"
+  }
 }
