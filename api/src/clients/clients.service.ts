@@ -4,11 +4,14 @@ import { UpdateClientDto } from './dto/update-client.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Client } from './entities/client.entity';
+import { Purchase } from 'src/purchase/entities/purchase.entity';
 
 @Injectable()
 export class ClientsService {
   constructor(
     @InjectRepository(Client) private clientRepository: Repository<Client>,
+    @InjectRepository(Purchase)
+    private purchaseRepository: Repository<Purchase>,
   ) {}
 
   create(createClientDto: CreateClientDto) {
@@ -16,11 +19,18 @@ export class ClientsService {
   }
 
   findAll() {
-    return this.clientRepository.find();
+    return this.clientRepository.find({ relations: ['purchases'] });
   }
 
-  findOne(id: string) {
-    return this.clientRepository.findOneByOrFail({ clientId: id });
+  async findOne(id: string) {
+    const client = await this.clientRepository.findOneBy({ clientId: id });
+    const purchases = await this.purchaseRepository.findBy({ clientId: id });
+
+    if (client) {
+      client.purchases = purchases;
+    }
+
+    return client;
   }
 
   update(id: string, updateClientDto: UpdateClientDto) {
