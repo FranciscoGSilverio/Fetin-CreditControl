@@ -19,17 +19,26 @@ export class PurchaseService {
 
   async create(createPurchaseDto: CreatePurchaseDto) {
     const { clientId, ...purchaseData } = createPurchaseDto;
-    const purchase = this.purchaseRepository.create(purchaseData);
+    
+    const newPurchase = {...purchaseData, dueDate: new Date(purchaseData.dueDate) ,isPending: true, createdAt: new Date(Date.now())}    
+    const purchase = this.purchaseRepository.create(newPurchase);
 
     const client = await this.clientsService.findOne(clientId);
 
     if (client) {
       purchase.client = client;
       await this.purchaseRepository.save(purchase);
+
+      const updatedClient = await this.clientsService.findOne(clientId);
+
+      const paymentsPending = updatedClient.purchases.filter(purchase => purchase.isPending).length;
+
+      await this.clientsService.update(clientId, { isPaymentPending: true, paymentsPending });
     }
 
     const { client: omitClient, ...purchaseDataWithoutClient } = purchase;
     return purchaseDataWithoutClient;
+
   }
 
   findAll() {

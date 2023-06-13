@@ -15,7 +15,12 @@ export class ClientsService {
   ) {}
 
   create(createClientDto: CreateClientDto) {
-    return this.clientRepository.save(createClientDto);
+
+    const paymentsPending = createClientDto.purchases ? createClientDto.purchases.filter(purchase => purchase.isPending).length : 0;
+
+    const newClient = {...createClientDto, createdAt: new Date(Date.now()), paymentsPending}
+
+    return this.clientRepository.save(newClient);
   }
 
   findAll() {

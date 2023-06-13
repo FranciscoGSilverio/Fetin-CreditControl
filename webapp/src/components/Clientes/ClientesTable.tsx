@@ -38,7 +38,7 @@ const ClientesTable = ({ data, openModal }: TableProps) => {
                 <td>{client.name}</td>
                 <td>{client.email}</td>
                 <td>{formatedDate}</td>
-                <td>{client.purchases.length}</td>
+                <td>{client.purchases?.length || 0}</td>
                 <td>
                   {client.isPaymentPending ? (
                     <BiErrorCircle size={25} className="text-warning" />

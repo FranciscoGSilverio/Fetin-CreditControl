@@ -21,11 +21,17 @@ export class Purchase {
   @Column()
   quantity: number;
 
-  @Column()
+  @Column({nullable: true})
   createdAt: Date;
 
   @Column()
   isPending: boolean;
+
+  @Column({nullable: true})
+  dueDate: Date;
+
+  @Column({nullable: true})
+  installments: number;
 
   @Column()
   clientId: string;

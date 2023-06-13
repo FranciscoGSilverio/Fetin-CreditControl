@@ -8,6 +8,7 @@ import { CardBody, CardTitle } from "reactstrap";
 
 import { useQuery } from "react-query";
 import axios from "axios";
+import ClientsForm from "../components/Clientes/ClientsForm";
 
 const PaginaClientes = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -49,6 +50,17 @@ const PaginaClientes = () => {
         closeModal={() => setClientsView(false)}
         client={currentClient}
       />
+
+      <div className="my-3">
+        <DefaultCard>
+          <CardBody>
+            <CardTitle tag="h5" className="pb-3">
+              Adicionar cliente
+            </CardTitle>
+            <ClientsForm />
+          </CardBody>
+        </DefaultCard>
+      </div>
     </>
   );
 };

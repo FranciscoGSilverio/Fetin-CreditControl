@@ -77,13 +77,13 @@ const ClientsViewModal = ({
 
                     <DefaultCard>
                       <div className="d-flex mb-4">
-                        <BsCalendar size={25} className="mx-1" className="text-muted"/>
+                        <BsCalendar size={25} className="mx-1 text-muted"/>
                         <span className="d-flex align-items-center mx-2">
                           Data da compra: {formatedPurchaseDate}
                         </span>
                       </div>
                       <div className="d-flex ">
-                        <BsCalendarX size={25} className="mx-1" className="text-muted"/>
+                        <BsCalendarX size={25} className="mx-1 text-muted"/>
                         <span className="d-flex align-items-center mx-2">
                           Data de vencimento: {formatedPurchaseDate}
                         </span>

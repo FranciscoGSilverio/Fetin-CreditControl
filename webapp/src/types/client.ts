@@ -7,5 +7,7 @@ export type Client = {
   email: string;
   createdAt: Date;
   isPaymentPending: boolean;
+  whatsAppNumber: string;
+  paymentsPending: number;
   purchases?: Purchase[];
 };
