@@ -21,6 +21,12 @@ export class Client {
   @Column()
   isPaymentPending: boolean;
 
+  @Column({nullable: true})
+  whatsAppNumber: string;
+
+  @Column({nullable: true})
+  paymentsPending: number;
+
   @OneToMany((type) => Purchase, (purchase) => purchase.client, {
     cascade: true,
   })

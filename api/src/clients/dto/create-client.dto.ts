@@ -4,7 +4,8 @@ export class CreateClientDto {
   name: string;
   age: number;
   email: string;
-  createdAt: Date;
   isPaymentPending: boolean;
+  whatsAppNumber: string;
+  paymentsPending?: number;
   purchases?: Purchase[];
 }
