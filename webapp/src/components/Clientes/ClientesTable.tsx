@@ -1,10 +1,13 @@
 import { Table } from "reactstrap";
+
 import { BsCheck } from "react-icons/bs";
 import { BiErrorCircle } from "react-icons/bi";
+
 import { formatDate } from "../../utils/formatDate";
+import { Client } from "../../types/client";
 
 type TableProps = {
-  data: any[];
+  data: Client[];
   openModal: (clientId: string) => void;
 };
 
@@ -27,7 +30,11 @@ const ClientesTable = ({ data, openModal }: TableProps) => {
             const formatedDate = `${day}/${month}/${year}`;
 
             return (
-              <tr key={client.clientId} style={{ cursor: "pointer" }} onClick={() => openModal(client.clientId)}>
+              <tr
+                key={client.clientId}
+                style={{ cursor: "pointer" }}
+                onClick={() => openModal(client.clientId)}
+              >
                 <td>{client.name}</td>
                 <td>{client.email}</td>
                 <td>{formatedDate}</td>

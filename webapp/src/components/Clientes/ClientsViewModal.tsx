@@ -8,10 +8,13 @@ import { BsCalendar, BsCalendarX } from "react-icons/bs";
 import DefaultCard from "../Common/DefaultCard";
 import { formatDate } from "../../utils/formatDate";
 
+import { Client } from "../../types/client";
+import { Purchase } from "../../types/purchase";
+
 type ClientsViewModalProps = {
   state: boolean;
   closeModal: () => void;
-  client: any;
+  client: Client;
 };
 
 const ClientsViewModal = ({
@@ -43,7 +46,7 @@ const ClientsViewModal = ({
         </div>
 
         <div className="d-flex flex-wrap align-items-center justify-content-around my-3">
-          {client?.purchases?.map((purchase: any) => {
+          {client?.purchases?.map((purchase: Purchase) => {
             const paymentStatus = purchase.isPending ? "Pendente" : "Pago";
 
             const { day, month, year } = formatDate(purchase.createdAt);
@@ -60,27 +63,27 @@ const ClientsViewModal = ({
                       </div>
 
                       <div className="d-flex align-items-center my-2">
-                        <MdAttachMoney size={25} />
+                        <MdAttachMoney size={25} className="text-muted"/>
                         <span className="mx-3">
                           Valor da compra: {purchase.price} reais
                         </span>
                       </div>
 
                       <div className="d-flex align-items-center my-2">
-                        <MdOutlineDownloadDone size={25} />
+                        <MdOutlineDownloadDone size={25} className="text-muted"/>
                         <span className="mx-3">Status: {paymentStatus}</span>
                       </div>
                     </div>
 
                     <DefaultCard>
                       <div className="d-flex mb-4">
-                        <BsCalendar size={25} className="mx-1" />
+                        <BsCalendar size={25} className="mx-1" className="text-muted"/>
                         <span className="d-flex align-items-center mx-2">
                           Data da compra: {formatedPurchaseDate}
                         </span>
                       </div>
                       <div className="d-flex ">
-                        <BsCalendarX size={25} className="mx-1" />
+                        <BsCalendarX size={25} className="mx-1" className="text-muted"/>
                         <span className="d-flex align-items-center mx-2">
                           Data de vencimento: {formatedPurchaseDate}
                         </span>
