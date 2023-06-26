@@ -1,10 +1,14 @@
 import { Table } from "reactstrap";
 
-import { BsCheck } from "react-icons/bs";
+import { BsCheck, BsFillTrashFill } from "react-icons/bs";
 import { BiErrorCircle } from "react-icons/bi";
 
 import { formatDate } from "../../utils/formatDate";
 import { Client } from "../../types/client";
+
+import { useMutation, useQueryClient } from "react-query";
+import axios from "axios";
+import { openModal as openResultModal } from "../Common/SweetAlerts";
 
 type TableProps = {
   data: Client[];
@@ -12,14 +16,39 @@ type TableProps = {
 };
 
 const ClientesTable = ({ data, openModal }: TableProps) => {
+  const apiUrl = import.meta.env.VITE_API_URL;
+
+  const queryClient = useQueryClient();
+
+  const { mutate: deleteClient } = useMutation({
+    mutationFn: (clientId: string) =>
+      axios.delete(`${apiUrl}/clients/${clientId}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries("clients");
+      openResultModal(
+        true,
+        "Usuário deletado com sucesso!",
+        "O usuário foi deletado com sucesso"
+      );
+    },
+    onError: () => {
+      openResultModal(
+        false,
+        "Erro ao deletar usuário!",
+        "Algo deu errado ao deletar o usuário, tente novamente mais tarde ou contate o suporte"
+      );
+    },
+  });
+
   return (
-    <Table>
+    <Table className="text-center">
       <thead>
         <tr>
           <th>Nome</th>
           <th>Email</th>
           <th>Cliente desde</th>
           <th>Compras efetuadas</th>
+          <th>Status</th>
           <th></th>
         </tr>
       </thead>
@@ -41,10 +70,20 @@ const ClientesTable = ({ data, openModal }: TableProps) => {
                 <td>{client.purchases?.length || 0}</td>
                 <td>
                   {client.isPaymentPending ? (
-                    <BiErrorCircle size={25} className="text-warning" />
+                    <BiErrorCircle size={25} className="text-warning mx-1" />
                   ) : (
-                    <BsCheck size={25} className="text-success" />
+                    <BsCheck size={25} className="text-success mx-1" />
                   )}
+                </td>
+                <td>
+                  <BsFillTrashFill
+                    size={22}
+                    className="text-danger mx-1"
+                    onClick={(event: React.MouseEvent<HTMLElement>) => {
+                      event.stopPropagation();
+                      deleteClient(client.clientId);
+                    }}
+                  />
                 </td>
               </tr>
             );
