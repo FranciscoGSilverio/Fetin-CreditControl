@@ -13,14 +13,12 @@ const ButtonWithLoading = ({
   isLoading,
 }: ButtonWithLoadingProps) => {
   return (
-    <Button type={type} style={{ backgroundColor: "#27374D" }}>
-      {isLoading ? (
-        <Spinner size="sm">
-          Loading...
-        </Spinner>
-      ) : (
-        children
-      )}
+    <Button
+      type={type}
+      style={{ backgroundColor: "#27374D" }}
+      disabled={isLoading}
+    >
+      {isLoading ? <Spinner size="sm">Loading...</Spinner> : children}
     </Button>
   );
 };

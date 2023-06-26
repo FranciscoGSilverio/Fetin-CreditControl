@@ -1,8 +1,7 @@
 import { Field, Form, Formik } from "formik";
 
 import ButtonWithLoading from "../Common/ButtonWithLoading";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
+import { openModal } from "../Common/SweetAlerts";
 
 import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
@@ -18,16 +17,6 @@ type FormClient = {
 const ClientsForm = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const queryClient = useQueryClient();
-  const MySwal = withReactContent(Swal);
-
-  const openSuccessModal = () => {
-    MySwal.fire({
-      title: "Usuário criado com sucesso!",
-      text: "O usuário cadastrado já deve apareceer na tabela de usuários acima",
-      icon: "success",
-      confirmButtonColor: "#27374D",
-    });
-  };
 
   const { mutate: createClient, isLoading } = useMutation({
     mutationFn: (client: FormClient) => {
@@ -35,7 +24,18 @@ const ClientsForm = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries("clients");
-      openSuccessModal();
+      openModal(
+        true,
+        "Usuário criado com sucesso!",
+        "O usuário cadastrado já deve apareceer na tabela de usuários acima"
+      );
+    },
+    onError: () => {
+      openModal(
+        false,
+        "Erro ao criar usuário!",
+        "Ocorreu um erro ao criar o usuário, verifique os campos e tente novamente"
+      );
     },
   });
 
@@ -112,7 +112,7 @@ const ClientsForm = () => {
             </div>
             <div className="px-3">
               <ButtonWithLoading type="submit" isLoading={isLoading}>
-                Criar Client
+                Criar cliente
               </ButtonWithLoading>
             </div>
           </Form>
