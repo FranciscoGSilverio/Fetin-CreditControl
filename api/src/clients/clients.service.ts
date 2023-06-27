@@ -15,10 +15,16 @@ export class ClientsService {
   ) {}
 
   create(createClientDto: CreateClientDto) {
+    const paymentsPending = createClientDto.purchases
+      ? createClientDto.purchases.filter((purchase) => purchase.isPending)
+          .length
+      : 0;
 
-    const paymentsPending = createClientDto.purchases ? createClientDto.purchases.filter(purchase => purchase.isPending).length : 0;
-
-    const newClient = {...createClientDto, createdAt: new Date(Date.now()), paymentsPending}
+    const newClient = {
+      ...createClientDto,
+      createdAt: new Date(Date.now()),
+      paymentsPending,
+    };
 
     return this.clientRepository.save(newClient);
   }
@@ -28,12 +34,19 @@ export class ClientsService {
   }
 
   async findOne(id: string) {
-    const client = await this.clientRepository.findOneBy({ clientId: id });
-    const purchases = await this.purchaseRepository.findBy({ clientId: id });
+    // const client = await this.clientRepository.findOneBy({ clientId: id });
+    // const purchases = await this.purchaseRepository.findBy({ clientId: id });
 
-    if (client) {
-      client.purchases = purchases;
-    }
+    // if (client) {
+    //   client.purchases = purchases;
+    // }
+
+    // return client;
+    const client = await this.clientRepository
+      .createQueryBuilder('client')
+      .leftJoinAndSelect('client.purchases', 'purchase')
+      .where('client.clientId = :id', { id })
+      .getOne();
 
     return client;
   }
@@ -42,7 +55,19 @@ export class ClientsService {
     return this.clientRepository.update(id, updateClientDto);
   }
 
-  remove(id: string) {
-    return this.clientRepository.delete(id);
+  async remove(id: string) {
+    const client = await this.findOne(id);
+
+    if (client) {
+      await this.purchaseRepository.remove(client.purchases);
+      await this.clientRepository.remove(client);
+
+      return client;
+    }
+
+    return null;
+
+    // console.log('id to delete:', id);
+    // return this.clientRepository.delete(id);
   }
 }
