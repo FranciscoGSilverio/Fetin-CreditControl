@@ -33,6 +33,9 @@ export class Purchase {
   @Column({nullable: true})
   installments: number;
 
+  @Column({nullable: true})
+  latestPaymentDate: Date;
+  
   @Column()
   clientId: string;
 
