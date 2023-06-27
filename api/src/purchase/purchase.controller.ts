@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { PurchaseService } from './purchase.service';
 import { CreatePurchaseDto } from './dto/create-purchase.dto';
@@ -36,6 +37,14 @@ export class PurchaseController {
     @Body() updatePurchaseDto: UpdatePurchaseDto,
   ) {
     return this.purchaseService.update(id, updatePurchaseDto);
+  }
+
+  @Put('pay/:purchaseId/:value')
+  payPurchase(
+    @Param('purchaseId') purchaseId: string,
+    @Param('value') value: number,
+  ) {
+    return this.purchaseService.payPurchase(purchaseId, value);
   }
 
   @Delete(':id')
