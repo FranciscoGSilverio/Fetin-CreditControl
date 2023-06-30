@@ -19,8 +19,5 @@
   "bugs": {
     "url": "https://github.com/FranciscoGSilverio/Fetin-CreditControl/issues"
   },
-  "homepage": "https://github.com/FranciscoGSilverio/Fetin-CreditControl#readme",
-  "dependencies": {
-    "formik": "^2.4.1"
-  }
+  "homepage": "https://github.com/FranciscoGSilverio/Fetin-CreditControl#readme"
 }
