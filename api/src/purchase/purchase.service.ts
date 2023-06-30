@@ -24,6 +24,7 @@ export class PurchaseService {
       ...purchaseData,
       dueDate: new Date(purchaseData.dueDate),
       isPending: true,
+      debtValue: purchaseData.price * purchaseData.quantity,
       createdAt: new Date(Date.now()),
     };
     const purchase = this.purchaseRepository.create(newPurchase);
@@ -64,28 +65,28 @@ export class PurchaseService {
     return this.findOne(id);
   }
 
-  async payPurchase(purchaseId: string, value: number) {
+  async updateDebtValue(purchaseId: string, value: number) {
     const purchase = await this.purchaseRepository.findOneBy({ purchaseId });
 
     if (purchase) {
       if (purchase.isPending) {
-        const { price, quantity } = purchase;
+        const { debtValue } = purchase;
 
-        const totalValue = price * quantity;
-
-        if (totalValue === Number(value)) {
+        if (debtValue === Number(value)) {
           const updatedPurchase = {
             ...purchase,
             isPending: false,
             latestPaymentDate: new Date(Date.now()),
+            debtValue: 0,
           };
 
           return this.update(purchaseId, updatedPurchase);
-        } else if (totalValue > Number(value)) {
+        } else if (debtValue > Number(value)) {
           const updatedPurchase = {
             ...purchase,
             isPending: true,
             latestPaymentDate: new Date(Date.now()),
+            debtValue: debtValue - Number(value),
           };
 
           return this.update(purchaseId, updatedPurchase);

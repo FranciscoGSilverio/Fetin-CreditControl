@@ -39,12 +39,12 @@ export class PurchaseController {
     return this.purchaseService.update(id, updatePurchaseDto);
   }
 
-  @Put('pay/:purchaseId/:value')
-  payPurchase(
+  @Put('updateDebtValue/:purchaseId/:value')
+  updateDebtValue(
     @Param('purchaseId') purchaseId: string,
     @Param('value') value: number,
   ) {
-    return this.purchaseService.payPurchase(purchaseId, value);
+    return this.purchaseService.updateDebtValue(purchaseId, value);
   }
 
   @Delete(':id')
