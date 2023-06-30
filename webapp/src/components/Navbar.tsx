@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { FiUser } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
 const Nav = styled.nav`
   color: #dde6ed;
@@ -44,15 +45,18 @@ const NavLink = styled.a`
 `;
 
 const Navbar = () => {
+
+  let navigate = useNavigate();
+
   return (
     <>
       <Nav>
         <NavTitle>Sistema de controle de crédito</NavTitle>
         <div className="d-flex align-items-center">
           <div className="d-flex align-items-center mx-5">
-            <NavLink>Visão geral</NavLink>
-            <NavLink>Clientes</NavLink>
-            <NavLink>Compras</NavLink>
+            <NavLink onClick={() => navigate('/')}>Visão geral</NavLink>
+            <NavLink onClick={() => navigate('/clientes')}>Clientes</NavLink>
+            <NavLink onClick={() => navigate('/compras')}>Compras</NavLink>
           </div>
           <FiUser size={25} style={{ cursor: "pointer" }} />
         </div>
