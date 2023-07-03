@@ -41,7 +41,7 @@ const ClientesTable = ({ data, openModal }: TableProps) => {
   });
 
   return (
-    <Table className="text-center">
+    <Table className="text-center" striped>
       <thead>
         <tr>
           <th>Nome</th>

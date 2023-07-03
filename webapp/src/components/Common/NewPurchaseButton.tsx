@@ -1,4 +1,4 @@
-import { BsPlus } from "react-icons/bs";
+import { FiShoppingCart } from "react-icons/fi";
 import styled from "styled-components";
 
 import { useNavigate } from "react-router-dom";
@@ -25,14 +25,14 @@ const PurchaseButton = styled.button`
   }
 `;
 
-const DashboardNewPurchaseButton = () => {
+const NewPurchaseButton = () => {
   let navigate = useNavigate();
 
   return (
-    <PurchaseButton onClick={() => navigate("purchase")}>
-      <BsPlus size={35} />
+    <PurchaseButton onClick={() => navigate("/compras")}>
+      <FiShoppingCart size={22} />
     </PurchaseButton>
   );
 };
 
-export default DashboardNewPurchaseButton;
+export default NewPurchaseButton;

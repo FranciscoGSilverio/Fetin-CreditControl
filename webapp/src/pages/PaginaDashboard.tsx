@@ -4,12 +4,12 @@ import { useQuery } from "react-query";
 import axios from "axios";
 
 import DashboardTopCard from "../components/Dashboard/DashboardTopCard";
-import DashboardPurchasesTable from "../components/Dashboard/DashboardPurchasesTable";
+import PendingPurchasesTable from "../components/Common/PendingPurchasesTable";
 import DefaultCard from "../components/Common/DefaultCard";
 
 import styled from "styled-components";
 import { CardBody, CardTitle } from "reactstrap";
-import DashboardNewPurchaseButton from "../components/Dashboard/DashboardNewPurchaseButton";
+import NewPurchaseButton from "../components/Common/NewPurchaseButton";
 import DashboardUpdateDebtValueModal from "../components/Dashboard/DashboardUpdateDebtValueModal";
 import { Purchase } from "../types/purchase";
 
@@ -75,7 +75,7 @@ const PaginaDashboard = () => {
               Compras pendentes
             </CardTitle>
           </CardBody>
-          <DashboardPurchasesTable
+          <PendingPurchasesTable
             data={dashboardData.pendingPurchases}
             openModal={(purchaseId) => {
               setCurrentPurchaseId(purchaseId);
@@ -93,7 +93,7 @@ const PaginaDashboard = () => {
         purchase={currentPurchase}
       />
 
-      <DashboardNewPurchaseButton />
+      <NewPurchaseButton />
     </>
   );
 };
