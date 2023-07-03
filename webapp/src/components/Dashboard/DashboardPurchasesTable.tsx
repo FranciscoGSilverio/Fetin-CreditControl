@@ -40,7 +40,7 @@ const DashboardPurchasesTable = ({ data }: TableProps) => {
   // });
 
   return (
-    <Table className="text-center">
+    <Table className="text-center" striped>
       <thead>
         <tr>
           <th>Produto</th>
@@ -50,6 +50,7 @@ const DashboardPurchasesTable = ({ data }: TableProps) => {
           <th>Data do último pagamento</th>
           <th>Valor pendente</th>
           <th>Cliente</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>

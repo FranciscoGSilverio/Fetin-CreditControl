@@ -27,7 +27,11 @@ export class PurchaseService {
       debtValue: purchaseData.price * purchaseData.quantity,
       createdAt: new Date(Date.now()),
     };
+
+    // console.log('newPurchase', newPurchase);
     const purchase = this.purchaseRepository.create(newPurchase);
+
+    console.log(purchase);
 
     const client = await this.clientsService.findOne(clientId);
 
