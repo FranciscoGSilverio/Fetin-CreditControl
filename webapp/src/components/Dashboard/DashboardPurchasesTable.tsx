@@ -1,7 +1,6 @@
 import { Table } from "reactstrap";
 
-import { BsCheck, BsFillTrashFill } from "react-icons/bs";
-import { BiErrorCircle } from "react-icons/bi";
+import { BsFillTrashFill, BsFillCreditCard2BackFill } from "react-icons/bs";
 
 import { formatDate } from "../../utils/formatDate";
 import { Purchase } from "../../types/purchase";
@@ -12,32 +11,33 @@ import { openModal as openResultModal } from "../Common/SweetAlerts";
 
 type TableProps = {
   data: Purchase[];
+  openModal: (purchaseId: string) => void;
 };
 
-const DashboardPurchasesTable = ({ data }: TableProps) => {
+const DashboardPurchasesTable = ({ data, openModal }: TableProps) => {
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const queryClient = useQueryClient();
 
-  // const { mutate: deleteClient } = useMutation({
-  //   mutationFn: (clientId: string) =>
-  //     axios.delete(`${apiUrl}/clients/${clientId}`),
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries("clients");
-  //     openResultModal(
-  //       true,
-  //       "Usuário deletado com sucesso!",
-  //       "O usuário foi deletado com sucesso"
-  //     );
-  //   },
-  //   onError: () => {
-  //     openResultModal(
-  //       false,
-  //       "Erro ao deletar usuário!",
-  //       "Algo deu errado ao deletar o usuário, tente novamente mais tarde ou contate o suporte"
-  //     );
-  //   },
-  // });
+  const { mutate: deletePurchase } = useMutation({
+    mutationFn: (clientId: string) =>
+      axios.delete(`${apiUrl}/purchase/${clientId}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries("dashboard");
+      openResultModal(
+        true,
+        "Compra deletada com sucesso!",
+        "As informações do usuário foram atualizadas com a remoção da compra"
+      );
+    },
+    onError: () => {
+      openResultModal(
+        false,
+        "Erro ao deletar compra!",
+        "Algo deu errado ao deletar a compra, tente novamente mais tarde ou contate o suporte"
+      );
+    },
+  });
 
   return (
     <Table className="text-center" striped>
@@ -67,11 +67,7 @@ const DashboardPurchasesTable = ({ data }: TableProps) => {
             const formatedLatestPaymentDate = `${latestPaymentDay}/${latestPaymentMonth}/${latestPaymentYear}`;
 
             return (
-              <tr
-                key={purchase.purchaseId}
-                style={{ cursor: "pointer" }}
-                // onClick={() => openModal(client.clientId)}
-              >
+              <tr key={purchase.purchaseId} style={{ cursor: "pointer" }}>
                 <td>{purchase.productName}</td>
                 <td>{purchase.price}</td>
                 <td>{purchase.quantity}</td>
@@ -80,14 +76,24 @@ const DashboardPurchasesTable = ({ data }: TableProps) => {
                 <td>{purchase.debtValue}</td>
                 <td>--</td>
                 <td>
-                  <BsFillTrashFill
-                    size={22}
-                    className="text-danger mx-1"
-                    // onClick={(event: React.MouseEvent<HTMLElement>) => {
-                    //   event.stopPropagation();
-                    //   deleteClient(client.clientId);
-                    // }}
-                  />
+                  <div className="d-flex align-items-center">
+                    <BsFillCreditCard2BackFill
+                      size={20}
+                      className="mx-1"
+                      onClick={(event: React.MouseEvent<HTMLElement>) => {
+                        event.stopPropagation();
+                        openModal(purchase.purchaseId);
+                      }}
+                    />
+                    <BsFillTrashFill
+                      size={20}
+                      className="text-danger mx-1"
+                      onClick={(event: React.MouseEvent<HTMLElement>) => {
+                        event.stopPropagation();
+                        deletePurchase(purchase.purchaseId);
+                      }}
+                    />
+                  </div>
                 </td>
               </tr>
             );

@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { useQuery } from "react-query";
 import axios from "axios";
 
@@ -8,6 +10,8 @@ import DefaultCard from "../components/Common/DefaultCard";
 import styled from "styled-components";
 import { CardBody, CardTitle } from "reactstrap";
 import DashboardNewPurchaseButton from "../components/Dashboard/DashboardNewPurchaseButton";
+import DashboardUpdateDebtValueModal from "../components/Dashboard/DashboardUpdateDebtValueModal";
+import { Purchase } from "../types/purchase";
 
 const DashboardTopCardContainer = styled.div`
   flex-grow: 1;
@@ -22,6 +26,13 @@ const PaginaDashboard = () => {
     const { data } = await axios.get(`${apiUrl}/dashboard/telemetry`);
     return data;
   });
+
+  const [updateDebtValueModal, setUpdateDebtValueModal] = useState(false);
+  const [currentPurchaseId, setCurrentPurchaseId] = useState("");
+
+  const currentPurchase = dashboardData?.pendingPurchases.find(
+    (purchase: Purchase) => purchase.purchaseId === currentPurchaseId
+  );
 
   if (isLoading || !dashboardData) return <></>;
   return (
@@ -64,9 +75,23 @@ const PaginaDashboard = () => {
               Compras pendentes
             </CardTitle>
           </CardBody>
-          <DashboardPurchasesTable data={dashboardData.pendingPurchases} />
+          <DashboardPurchasesTable
+            data={dashboardData.pendingPurchases}
+            openModal={(purchaseId) => {
+              setCurrentPurchaseId(purchaseId);
+              setUpdateDebtValueModal(true);
+            }}
+          />
         </DefaultCard>
       </div>
+
+      <DashboardUpdateDebtValueModal
+        state={updateDebtValueModal}
+        closeModal={() => {
+          setUpdateDebtValueModal(false);
+        }}
+        purchase={currentPurchase}
+      />
 
       <DashboardNewPurchaseButton />
     </>
