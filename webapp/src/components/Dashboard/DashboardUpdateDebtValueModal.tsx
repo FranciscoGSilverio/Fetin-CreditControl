@@ -84,8 +84,8 @@ const DashboardUpdateDebtValueModal = ({
       <Formik
         initialValues={{
           purchaseId: purchase?.purchaseId,
-          totalValue: totalPurchaseValue || 0,
-          debtValue: purchase?.debtValue,
+          totalValue: `R$ ${totalPurchaseValue || 0}`,
+          debtValue: `R$ ${purchase?.debtValue}`,
           createdAt: formattedCreatedAtDate,
           dueDate: formattedDueDate,
           discountValue: null,

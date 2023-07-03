@@ -13,7 +13,7 @@ const PurchaseButton = styled.button`
 
   position: fixed;
   bottom: 20px;
-  right: 30px;
+  right: 5%;
 
   transition: all 0.5s;
 
