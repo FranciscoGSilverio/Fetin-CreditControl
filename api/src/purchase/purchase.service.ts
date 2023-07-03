@@ -19,9 +19,19 @@ export class PurchaseService {
 
   async create(createPurchaseDto: CreatePurchaseDto) {
     const { clientId, ...purchaseData } = createPurchaseDto;
-    
-    const newPurchase = {...purchaseData, dueDate: new Date(purchaseData.dueDate) ,isPending: true, createdAt: new Date(Date.now())}    
+
+    const newPurchase = {
+      ...purchaseData,
+      dueDate: new Date(purchaseData.dueDate),
+      isPending: true,
+      debtValue: purchaseData.price * purchaseData.quantity,
+      createdAt: new Date(Date.now()),
+    };
+
+    // console.log('newPurchase', newPurchase);
     const purchase = this.purchaseRepository.create(newPurchase);
+
+    // console.log(purchase);
 
     const client = await this.clientsService.findOne(clientId);
 
@@ -31,14 +41,18 @@ export class PurchaseService {
 
       const updatedClient = await this.clientsService.findOne(clientId);
 
-      const paymentsPending = updatedClient.purchases.filter(purchase => purchase.isPending).length;
+      const paymentsPending = updatedClient.purchases.filter(
+        (purchase) => purchase.isPending,
+      ).length;
 
-      await this.clientsService.update(clientId, { isPaymentPending: true, paymentsPending });
+      await this.clientsService.update(clientId, {
+        isPaymentPending: true,
+        paymentsPending,
+      });
     }
 
     const { client: omitClient, ...purchaseDataWithoutClient } = purchase;
     return purchaseDataWithoutClient;
-
   }
 
   findAll() {
@@ -49,8 +63,45 @@ export class PurchaseService {
     return this.purchaseRepository.findOneByOrFail({ purchaseId: id });
   }
 
-  update(id: string, updatePurchaseDto: UpdatePurchaseDto) {
-    return this.purchaseRepository.update(id, updatePurchaseDto);
+  async update(id: string, updatePurchaseDto: UpdatePurchaseDto) {
+    await this.purchaseRepository.update(id, updatePurchaseDto);
+
+    return this.findOne(id);
+  }
+
+  async updateDebtValue(purchaseId: string, value: number) {
+    const purchase = await this.purchaseRepository.findOneBy({ purchaseId });
+
+    if (purchase) {
+      if (purchase.isPending) {
+        const { debtValue } = purchase;
+
+        if (debtValue === Number(value)) {
+          const updatedPurchase = {
+            ...purchase,
+            isPending: false,
+            latestPaymentDate: new Date(Date.now()),
+            debtValue: 0,
+          };
+
+          return this.update(purchaseId, updatedPurchase);
+        } else if (debtValue > Number(value)) {
+          const updatedPurchase = {
+            ...purchase,
+            isPending: true,
+            latestPaymentDate: new Date(Date.now()),
+            debtValue: debtValue - Number(value),
+          };
+
+          return this.update(purchaseId, updatedPurchase);
+        } else
+          return {
+            message: 'Value being payed is greater than the value of the debt',
+          };
+      } else return { message: 'Purchase already paid.' };
+    }
+
+    return { message: 'Purchase not found!' };
   }
 
   remove(id: string) {

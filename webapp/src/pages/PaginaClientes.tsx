@@ -9,6 +9,7 @@ import { CardBody, CardTitle } from "reactstrap";
 import { useQuery } from "react-query";
 import axios from "axios";
 import ClientsForm from "../components/Clientes/ClientsForm";
+import { Client } from "../types/client";
 
 const PaginaClientes = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -26,7 +27,7 @@ const PaginaClientes = () => {
   const [currentClientId, setCurrentClientId] = useState("");
 
   const currentClient = clientsData?.find(
-    (client: any) => client.clientId === currentClientId
+    (client: Client) => client.clientId === currentClientId
   );
 
   return (
