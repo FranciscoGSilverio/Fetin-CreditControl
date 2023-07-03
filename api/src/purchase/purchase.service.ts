@@ -31,7 +31,7 @@ export class PurchaseService {
     // console.log('newPurchase', newPurchase);
     const purchase = this.purchaseRepository.create(newPurchase);
 
-    console.log(purchase);
+    // console.log(purchase);
 
     const client = await this.clientsService.findOne(clientId);
 

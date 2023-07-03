@@ -7,6 +7,7 @@ import DefaultCard from "../components/Common/DefaultCard";
 
 import styled from "styled-components";
 import { CardBody, CardTitle } from "reactstrap";
+import DashboardNewPurchaseButton from "../components/Dashboard/DashboardNewPurchaseButton";
 
 const DashboardTopCardContainer = styled.div`
   flex-grow: 1;
@@ -66,6 +67,8 @@ const PaginaDashboard = () => {
           <DashboardPurchasesTable data={dashboardData.pendingPurchases} />
         </DefaultCard>
       </div>
+
+      <DashboardNewPurchaseButton />
     </>
   );
 };
