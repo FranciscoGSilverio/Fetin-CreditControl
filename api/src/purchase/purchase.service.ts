@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { ClientsService } from 'src/clients/clients.service';
+import { CronTaskService } from 'src/cron-task/cron-task.service';
 
 @Injectable()
 export class PurchaseService {
@@ -15,6 +16,7 @@ export class PurchaseService {
     @InjectRepository(Purchase)
     private readonly purchaseRepository: Repository<Purchase>,
     private readonly clientsService: ClientsService,
+    private readonly cronTaskService: CronTaskService,
   ) {}
 
   async create(createPurchaseDto: CreatePurchaseDto) {
@@ -30,6 +32,23 @@ export class PurchaseService {
 
     // console.log('newPurchase', newPurchase);
     const purchase = this.purchaseRepository.create(newPurchase);
+
+    // this.cronTaskService.handleCron(
+    //   '999999999',
+    //   `Olá!, lembre-se de realizar o pagamento da compra de ${
+    //     purchase.productName
+    //   } no valor de R$${
+    //     purchase.price
+    //   } até o dia ${purchase.dueDate.toLocaleDateString()}`,
+    //   purchase.dueDate,
+    // );
+
+    const now = Date.now();
+
+    //5 seconds from now
+    const testingDueDate = new Date(now + 10000);
+
+    this.cronTaskService.addCronJob('Billing message', testingDueDate);
 
     // console.log(purchase);
 
