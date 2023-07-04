@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 
 import PaginaClientes from "./pages/PaginaClientes";
 import PaginaDashboard from "./pages/PaginaDashboard";
+import PaginaCompras from "./pages/PaginaCompras";
 import Navbar from "./components/Navbar";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route path="/" element={<PaginaDashboard />} />
           <Route path="/clientes" element={<PaginaClientes />} />
+          <Route path="/compras" element={<PaginaCompras />} />
         </Routes>
       </Container>
     </>

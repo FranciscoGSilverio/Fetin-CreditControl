@@ -7,14 +7,14 @@ import { Purchase } from "../../types/purchase";
 
 import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
-import { openModal as openResultModal } from "../Common/SweetAlerts";
+import { openModal as openResultModal } from "./SweetAlerts";
 
 type TableProps = {
   data: Purchase[];
   openModal: (purchaseId: string) => void;
 };
 
-const DashboardPurchasesTable = ({ data, openModal }: TableProps) => {
+const PendingPurchasesTable = ({ data, openModal }: TableProps) => {
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const queryClient = useQueryClient();
@@ -103,4 +103,4 @@ const DashboardPurchasesTable = ({ data, openModal }: TableProps) => {
   );
 };
 
-export default DashboardPurchasesTable;
+export default PendingPurchasesTable;

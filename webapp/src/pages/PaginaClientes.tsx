@@ -3,6 +3,7 @@ import { useState } from "react";
 import ClientesTable from "../components/Clientes/ClientesTable";
 import DefaultCard from "../components/Common/DefaultCard";
 import ClientsViewModal from "../components/Clientes/ClientsViewModal";
+import NewPurchaseButton from "../components/Common/NewPurchaseButton";
 
 import { CardBody, CardTitle } from "reactstrap";
 
@@ -32,6 +33,16 @@ const PaginaClientes = () => {
 
   return (
     <>
+      <div className="my-3">
+        <DefaultCard>
+          <CardBody>
+            <CardTitle tag="h5" className="pb-3">
+              Adicionar cliente
+            </CardTitle>
+            <ClientsForm />
+          </CardBody>
+        </DefaultCard>
+      </div>
       <DefaultCard>
         <CardBody>
           <CardTitle tag="h5" className="pb-3">
@@ -52,16 +63,7 @@ const PaginaClientes = () => {
         client={currentClient}
       />
 
-      <div className="my-3">
-        <DefaultCard>
-          <CardBody>
-            <CardTitle tag="h5" className="pb-3">
-              Adicionar cliente
-            </CardTitle>
-            <ClientsForm />
-          </CardBody>
-        </DefaultCard>
-      </div>
+      <NewPurchaseButton />
     </>
   );
 };
