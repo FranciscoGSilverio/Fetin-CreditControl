@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 
 import { ClientsService } from 'src/clients/clients.service';
 import { CronTaskService } from 'src/cron-task/cron-task.service';
+import { WhatsappMessageService } from 'src/whatsapp-message/whatsapp-message.service';
 
 @Injectable()
 export class PurchaseService {
@@ -17,6 +18,7 @@ export class PurchaseService {
     private readonly purchaseRepository: Repository<Purchase>,
     private readonly clientsService: ClientsService,
     private readonly cronTaskService: CronTaskService,
+    private readonly whatsAppMessageService: WhatsappMessageService,
   ) {}
 
   async create(createPurchaseDto: CreatePurchaseDto) {
@@ -33,24 +35,28 @@ export class PurchaseService {
     // console.log('newPurchase', newPurchase);
     const purchase = this.purchaseRepository.create(newPurchase);
 
-    // this.cronTaskService.handleCron(
-    //   '999999999',
-    //   `Olá!, lembre-se de realizar o pagamento da compra de ${
-    //     purchase.productName
-    //   } no valor de R$${
-    //     purchase.price
-    //   } até o dia ${purchase.dueDate.toLocaleDateString()}`,
-    //   purchase.dueDate,
-    // );
-
-    const now = Date.now();
+    /*const now = Date.now();
 
     //5 seconds from now
     const testingDueDate = new Date(now + 10000);
 
-    this.cronTaskService.addCronJob('Billing message', testingDueDate);
+     this.cronTaskService.addCronJob('Billing message', testingDueDate);*/
 
-    // console.log(purchase);
+    // console.log('environment', process.env);
+
+    const messageContent = this.whatsAppMessageService.getTextMessageInput(
+      process.env.RECIPIENT_WAID,
+      'Compra realizada com sucesso!',
+    );
+
+    console.log('messageContent', messageContent);
+
+    this.whatsAppMessageService
+      .sendMessage(messageContent)
+      .then((res) => {
+        console.log('worked: ', res.status);
+      })
+      .catch((error) => console.log('did not work: ', error.status));
 
     const client = await this.clientsService.findOne(clientId);
 
