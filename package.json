@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "install:api" : "cd api && rm -rf node_modules && npm install",
+    "install:webapp" : "cd webapp && rm -rf node_modules && npm install",
+    "install:app" : "install:api && install:webapp",
     "webapp": "cd webapp && npm run dev",
     "api": "cd api && npm start",
     "api:dev": "cd api && npm run start:dev",
