@@ -1,6 +1,16 @@
+import { useState } from "react";
 import styled from "styled-components";
 import { FiUser } from "react-icons/fi";
 import { useNavigate, useLocation } from "react-router-dom";
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from "reactstrap";
+import { useAuth } from "../hooks/useAuth";
+import { HiOutlineLogout } from "react-icons/hi";
+import { signOutUser } from "../utils/auth/emailAndPasswordLogin";
 
 const Nav = styled.nav`
   color: #fff;
@@ -66,9 +76,19 @@ const NavLink = styled.a<{ $isHighlighted?: boolean }>`
   }
 `;
 
+const LogoutDropdownBtn = styled(DropdownItem)`
+  &:active {
+    background-color: #fff;
+  }
+`;
+
 const Navbar = () => {
   let navigate = useNavigate();
   const { pathname } = useLocation();
+
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const { authUser } = useAuth();
 
   const isHighlighted = (path: string) => {
     return pathname === path;
@@ -101,7 +121,27 @@ const Navbar = () => {
               Compras
             </NavLink>
           </div>
-          <FiUser size={25} style={{ cursor: "pointer" }} />
+          <Dropdown
+            isOpen={dropdownOpen}
+            toggle={() => setDropdownOpen((prevState: boolean) => !prevState)}
+          >
+            <DropdownToggle style={{ background: "none", border: "none" }}>
+              <FiUser size={25} style={{ cursor: "pointer" }} />
+            </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem disabled style={{ color: "#000" }}>
+                {authUser?.email || ""}
+              </DropdownItem>
+              <DropdownItem divider />
+              <LogoutDropdownBtn
+                className="w-100 d-flex justify-content-between"
+                onClick={() => signOutUser()}
+              >
+                <span className="text-danger">Sair</span>
+                <HiOutlineLogout size={25} className="text-danger" />
+              </LogoutDropdownBtn>
+            </DropdownMenu>
+          </Dropdown>
         </div>
       </Nav>
       <NavPlaceholder />

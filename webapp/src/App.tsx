@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import PaginaClientes from "./pages/PaginaClientes";
@@ -18,10 +17,6 @@ function App() {
   const { authUser } = useAuth();
 
   const isAuthenticated = authUser ? true : false;
-
-  useEffect(() => {
-    console.log("authUser", authUser);
-  }, [authUser]);
 
   return (
     <>

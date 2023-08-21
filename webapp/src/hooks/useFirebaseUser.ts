@@ -1,18 +1,15 @@
 import { useState, useEffect, useCallback } from "react";
 import type { User } from "firebase/auth";
 import { auth as Firebase } from "../services/firebaseConfig";
+import { useNavigate } from "react-router-dom";
 
 export type FormattedUserType = {
-  photoUrl?: string | undefined | null;
   email?: string | undefined | null;
-  name?: string | undefined | null;
   loadingAuthentication?: boolean;
 };
 
 const formatAuthUser = (user: User | null): FormattedUserType => ({
-  photoUrl: user?.photoURL,
   email: user?.email,
-  name: user?.displayName,
 });
 
 export function useFirebaseAuth() {
@@ -23,6 +20,8 @@ export function useFirebaseAuth() {
 
   const [authenticationFailedAlertState, setAuthenticationFailedAlertState] =
     useState({ state: false, message: "" });
+
+  let navigate = useNavigate();
 
   const clear = useCallback(() => {
     setAuthUser(null);
@@ -43,11 +42,17 @@ export function useFirebaseAuth() {
         return;
       }
 
+      setloadingLogin(true);
+
       const formattedUser = formatAuthUser(authState);
       setAuthUser(formattedUser);
 
       const token = await getJwtToken();
       setToken(token);
+
+      navigate("/");
+
+      setloadingLogin(false);
     };
 
     const unsubscribe = Firebase.onAuthStateChanged(authStateChanged);
