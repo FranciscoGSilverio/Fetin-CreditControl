@@ -6,6 +6,7 @@ const ShadowedCard = styled.div`
   padding: 18px;
   border-radius: 10px;
   height: 100%;
+  background-color: #fff;
 `;
 
 type DefaultCardProps = {

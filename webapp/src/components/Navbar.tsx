@@ -25,7 +25,6 @@ const NavTitle = styled.a`
 
   &:hover {
     color: #fff;
-    
   }
 `;
 
@@ -62,7 +61,7 @@ const NavLink = styled.a<{ $isHighlighted?: boolean }>`
 
     &::after {
       transform: scaleX(1);
-      height: 0.5px;
+      height: 0.1px;
     }
   }
 `;
