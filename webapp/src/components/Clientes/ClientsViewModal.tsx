@@ -3,10 +3,11 @@ import Modal from "react-bootstrap/Modal";
 
 import { FiUser, FiShoppingCart } from "react-icons/fi";
 import { MdAttachMoney, MdOutlineDownloadDone } from "react-icons/md";
-import { BsCalendar, BsCalendarX } from "react-icons/bs";
+import { BsCalendar, BsCalendarX, BsWhatsapp } from "react-icons/bs";
 
 import DefaultCard from "../Common/DefaultCard";
 import { formatDate } from "../../utils/formatDate";
+import { sendWhatsappMessage } from "../../utils/sendWhatsappMessage";
 
 import { Client } from "../../types/client";
 import { Purchase } from "../../types/purchase";
@@ -63,27 +64,30 @@ const ClientsViewModal = ({
                       </div>
 
                       <div className="d-flex align-items-center my-2">
-                        <MdAttachMoney size={25} className="text-muted"/>
+                        <MdAttachMoney size={25} className="text-muted" />
                         <span className="mx-3">
                           Valor da compra: {purchase.price} reais
                         </span>
                       </div>
 
                       <div className="d-flex align-items-center my-2">
-                        <MdOutlineDownloadDone size={25} className="text-muted"/>
+                        <MdOutlineDownloadDone
+                          size={25}
+                          className="text-muted"
+                        />
                         <span className="mx-3">Status: {paymentStatus}</span>
                       </div>
                     </div>
 
                     <DefaultCard>
                       <div className="d-flex mb-4">
-                        <BsCalendar size={25} className="mx-1 text-muted"/>
+                        <BsCalendar size={25} className="mx-1 text-muted" />
                         <span className="d-flex align-items-center mx-2">
                           Data da compra: {formatedPurchaseDate}
                         </span>
                       </div>
                       <div className="d-flex ">
-                        <BsCalendarX size={25} className="mx-1 text-muted"/>
+                        <BsCalendarX size={25} className="mx-1 text-muted" />
                         <span className="d-flex align-items-center mx-2">
                           Data de vencimento: {formatedPurchaseDate}
                         </span>
@@ -97,11 +101,14 @@ const ClientsViewModal = ({
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button variant="danger" onClick={handleClose}>
           Fechar
         </Button>
-        <Button variant="primary" onClick={handleClose}>
-          Contatar cliente
+        <Button variant="outline-success" onClick={() => sendWhatsappMessage('5535998381857')}>
+          <div className="d-flex align-items-center">
+            <BsWhatsapp style={{ marginRight: "10px" }} size={15} />
+            <span>Contatar cliente</span>
+          </div>
         </Button>
       </Modal.Footer>
     </Modal>
