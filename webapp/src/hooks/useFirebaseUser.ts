@@ -16,7 +16,7 @@ export function useFirebaseAuth() {
   const [authUser, setAuthUser] = useState<FormattedUserType | null>(null);
   const [token, setToken] = useState<string>("");
 
-  const [loadingLogin, setloadingLogin] = useState<boolean>(true);
+  const [loadingLogin, setloadingLogin] = useState<boolean>(false);
 
   const [authenticationFailedAlertState, setAuthenticationFailedAlertState] =
     useState({ state: false, message: "" });
