@@ -8,6 +8,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { ClientsService } from 'src/clients/clients.service';
+import { CronTaskService } from 'src/cron-task/cron-task.service';
+import { WhatsappMessageService } from 'src/whatsapp-message/whatsapp-message.service';
 
 @Injectable()
 export class PurchaseService {
@@ -15,6 +17,8 @@ export class PurchaseService {
     @InjectRepository(Purchase)
     private readonly purchaseRepository: Repository<Purchase>,
     private readonly clientsService: ClientsService,
+    private readonly cronTaskService: CronTaskService,
+    private readonly whatsAppMessageService: WhatsappMessageService,
   ) {}
 
   async create(createPurchaseDto: CreatePurchaseDto) {
@@ -31,7 +35,28 @@ export class PurchaseService {
     // console.log('newPurchase', newPurchase);
     const purchase = this.purchaseRepository.create(newPurchase);
 
-    // console.log(purchase);
+    /*const now = Date.now();
+
+    //5 seconds from now
+    const testingDueDate = new Date(now + 10000);
+
+     this.cronTaskService.addCronJob('Billing message', testingDueDate);*/
+
+    // console.log('environment', process.env);
+
+    const messageContent = this.whatsAppMessageService.getTextMessageInput(
+      process.env.RECIPIENT_WAID,
+      'Compra realizada com sucesso!',
+    );
+
+    console.log('messageContent', messageContent);
+
+    this.whatsAppMessageService
+      .sendMessage(messageContent)
+      .then((res) => {
+        console.log('worked: ', res.status);
+      })
+      .catch((error) => console.log('did not work: ', error.status));
 
     const client = await this.clientsService.findOne(clientId);
 

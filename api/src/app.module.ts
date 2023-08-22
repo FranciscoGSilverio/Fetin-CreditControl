@@ -6,13 +6,22 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { config } from './ormconfig';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { CronTaskModule } from './cron-task/cron-task.module';
+
+import { ScheduleModule } from '@nestjs/schedule';
+import { WhatsappMessageModule } from './whatsapp-message/whatsapp-message.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     ClientsModule,
     PurchaseModule,
-    TypeOrmModule.forRoot(config),
+    CronTaskModule,
     DashboardModule,
+    TypeOrmModule.forRoot(config),
+    ScheduleModule.forRoot(),
+    WhatsappMessageModule,
+    ConfigModule.forRoot()
   ],
 })
 export class AppModule {}

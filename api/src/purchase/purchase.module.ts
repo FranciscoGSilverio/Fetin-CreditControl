@@ -6,10 +6,20 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Purchase } from './entities/purchase.entity';
 import { Client } from './../clients/entities/client.entity';
 import { ClientsService } from 'src/clients/clients.service';
+import { CronTaskService } from 'src/cron-task/cron-task.service';
+import { WhatsappMessageService } from 'src/whatsapp-message/whatsapp-message.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Purchase]), TypeOrmModule.forFeature([Client])],
+  imports: [
+    TypeOrmModule.forFeature([Purchase]),
+    TypeOrmModule.forFeature([Client]),
+  ],
   controllers: [PurchaseController],
-  providers: [PurchaseService, ClientsService],
+  providers: [
+    PurchaseService,
+    ClientsService,
+    CronTaskService,
+    WhatsappMessageService,
+  ],
 })
 export class PurchaseModule {}
