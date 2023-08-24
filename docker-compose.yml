@@ -1,0 +1,29 @@
+version: "3.0"
+
+services:
+  app:
+    build:
+      context: ./api
+    container_name: api
+    networks:
+      - node-network
+    tty: true
+    volumes:
+      - ./api:/usr/src/app
+    ports:
+      - "3000:3000"
+    command: "node dist/main.js"
+
+  nginx:
+    build:
+      context: ./nginx
+    container_name: nginx
+    restart: always
+    networks:
+      - node-network
+    ports:
+      - "8080:80"
+
+networks:
+  node-network:
+    driver: bridge
