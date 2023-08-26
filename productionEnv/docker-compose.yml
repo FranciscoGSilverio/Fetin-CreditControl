@@ -7,18 +7,22 @@ services:
     networks:
       - node-network
     tty: true
-    ports:
-      - "3000:3000"
     command: "node dist/main.js"
 
   nginx:
-    image: franciscogsilverio/fetin-credit-control-nginx:latest
+    image: nginx:latest
     container_name: nginx
     restart: always
     networks:
       - node-network
     ports:
-      - "8080:80"
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/conf/:/etc/nginx/conf.d/:ro
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
+    tty: true
 
 networks:
   node-network:
