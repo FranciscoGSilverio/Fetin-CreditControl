@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { database } from './firebase.config';
+import { UpdateFirebaseDto } from './dto/update-firebase.dto';
 
 @Injectable()
 export class FirebaseService {
@@ -8,7 +9,7 @@ export class FirebaseService {
     const snapshot = await ref.once('value');
     return snapshot.val();
   }
-  async set(value: any, path?: string, ) {
+  async reset(value: UpdateFirebaseDto, path?: string) {
     const ref = database.ref(path);
     await ref.set(value);
   }

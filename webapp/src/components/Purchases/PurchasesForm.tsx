@@ -1,7 +1,7 @@
 import { Formik, Form, Field } from "formik";
 import ButtonWithLoading from "../Common/ButtonWithLoading";
 
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import { openModal } from "../Common/SweetAlerts";
 
@@ -31,6 +31,8 @@ const PurchasesForm = () => {
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
+  const queryClient = useQueryClient();
+
   const { data: clients, isLoading: isClientsLoading } = useQuery(
     "clientsInPurchasesForm",
     async () => {
@@ -39,12 +41,28 @@ const PurchasesForm = () => {
     }
   );
 
+  const { refetch: fetchRFIDtag } = useQuery(
+    "tagRFID",
+    async () => {
+      const { data } = await axios.get(`${apiUrl}/firebase`);
+      return data;
+    },
+    { enabled: false, refetchOnWindowFocus: false }
+  );
+
+  const { mutate: resetRFIDtag } = useMutation({
+    mutationFn: () => {
+      return axios.post(`${apiUrl}/firebase`, { Tag: "0" });
+    },
+  });
+
   const { mutate: createPurchase, isLoading } = useMutation({
     mutationFn: (purchase: FormPurchase) => {
       return axios.post(`${apiUrl}/purchase`, purchase);
     },
     onSuccess: () => {
-      //   queryClient.invalidateQueries("clients");
+      resetRFIDtag();
+      queryClient.invalidateQueries("clients");
       openModal(
         true,
         "Compra criada com sucesso!",
@@ -71,8 +89,18 @@ const PurchasesForm = () => {
         installments: 1,
       }}
       onSubmit={(values, { resetForm }) => {
-        createPurchase(values);
-        resetForm();
+        fetchRFIDtag().then(({ data: tag }) => {
+          if (tag?.Tag === '0' || tag === '0') {
+            openModal(
+              false,
+              "Erro ao criar compra!",
+              "Tag RFID não detectada, faça a leitura da TAG do cliente usando o leitor RFID e tente novamente"
+            );
+          } else {
+            createPurchase(values);
+            resetForm();
+          }
+        });
       }}
     >
       {() => (
