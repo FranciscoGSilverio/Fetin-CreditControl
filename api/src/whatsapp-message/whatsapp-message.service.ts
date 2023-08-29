@@ -17,7 +17,7 @@ export class WhatsappMessageService {
     return axios(config);
   }
 
-  getTextMessageInput(recipient: string, text: string) {
+  getTextMessageInput(recipient: string) {
     return JSON.stringify({
       messaging_product: 'whatsapp',
       to: recipient,

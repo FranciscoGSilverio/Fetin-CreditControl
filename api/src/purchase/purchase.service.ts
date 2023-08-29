@@ -35,28 +35,23 @@ export class PurchaseService {
     // console.log('newPurchase', newPurchase);
     const purchase = this.purchaseRepository.create(newPurchase);
 
-    /*const now = Date.now();
+    const now = Date.now();
 
-    //5 seconds from now
+    //10 seconds from now
     const testingDueDate = new Date(now + 10000);
-
-     this.cronTaskService.addCronJob('Billing message', testingDueDate);*/
-
-    // console.log('environment', process.env);
 
     const messageContent = this.whatsAppMessageService.getTextMessageInput(
       process.env.RECIPIENT_WAID,
-      'Compra realizada com sucesso!',
     );
-
-    console.log('messageContent', messageContent);
 
     this.whatsAppMessageService
       .sendMessage(messageContent)
       .then((res) => {
         console.log('worked: ', res.status);
       })
-      .catch((error) => console.log('did not work: ', error.status));
+      .catch((error) => console.log('did not work: ', error));
+
+    this.cronTaskService.addCronJob('Billing message', testingDueDate);
 
     const client = await this.clientsService.findOne(clientId);
 
