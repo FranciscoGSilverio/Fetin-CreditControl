@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 import LoginBackground from "./../assets/loginBackground.png";
 import DefaultCard from "../components/Common/DefaultCard";
@@ -6,6 +7,7 @@ import { Formik, Form, Field } from "formik";
 import ButtonWithLoading from "../components/Common/ButtonWithLoading";
 import { signInUser } from "../utils/auth/emailAndPasswordLogin";
 import { useAuth } from "../hooks/useAuth";
+import ErrorSnackbar from "../components/Login/ErrorSnackbar";
 
 const Background = styled.div`
   width: 100vw;
@@ -29,8 +31,19 @@ const CardContainer = styled.div`
 const PaginaLogin = () => {
   const { loadingLogin, setloadingLogin } = useAuth();
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+  const handleLoginFail = () => {
+    setSnackbarOpen(true);
+    setloadingLogin(false);
+  };
+
   return (
     <Background>
+      <ErrorSnackbar
+        open={snackbarOpen}
+        handleClose={() => setSnackbarOpen((prevState) => !prevState)}
+      />
       <CardContainer>
         <DefaultCard>
           <CardBody>
@@ -45,7 +58,7 @@ const PaginaLogin = () => {
               }}
               onSubmit={(values) => {
                 setloadingLogin(true);
-                signInUser(values.email, values.password);
+                signInUser(values.email, values.password, handleLoginFail);
               }}
             >
               {() => (
