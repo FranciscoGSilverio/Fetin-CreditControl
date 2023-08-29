@@ -59,6 +59,8 @@ const DashboardUpdateDebtValueModal = ({
       axios.put(`${apiUrl}/purchase/updateDebtValue/${purchaseId}/${value}`),
     onSuccess: () => {
       queryClient.invalidateQueries("dashboard");
+      queryClient.invalidateQueries("pendingPurchases");
+
       handleClose();
       openResultModal(
         true,
