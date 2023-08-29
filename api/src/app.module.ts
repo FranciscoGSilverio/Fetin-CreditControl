@@ -11,17 +11,20 @@ import { CronTaskModule } from './cron-task/cron-task.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { WhatsappMessageModule } from './whatsapp-message/whatsapp-message.module';
 import { ConfigModule } from '@nestjs/config';
+import { FirebaseModule } from './firebase/firebase.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({isGlobal: true}),
+    TypeOrmModule.forRoot(config),
+    ScheduleModule.forRoot(),
     ClientsModule,
     PurchaseModule,
     CronTaskModule,
     DashboardModule,
-    TypeOrmModule.forRoot(config),
-    ScheduleModule.forRoot(),
     WhatsappMessageModule,
-    ConfigModule.forRoot()
+    FirebaseModule
   ],
+  
 })
 export class AppModule {}
