@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 import { ClientsService } from 'src/clients/clients.service';
 import { CronTaskService } from 'src/cron-task/cron-task.service';
 import { WhatsappMessageService } from 'src/whatsapp-message/whatsapp-message.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PurchaseService {
@@ -19,6 +20,7 @@ export class PurchaseService {
     private readonly clientsService: ClientsService,
     private readonly cronTaskService: CronTaskService,
     private readonly whatsAppMessageService: WhatsappMessageService,
+    private readonly configService: ConfigService,
   ) {}
 
   async create(createPurchaseDto: CreatePurchaseDto) {
@@ -41,7 +43,8 @@ export class PurchaseService {
     const testingDueDate = new Date(now + 10000);
 
     const messageContent = this.whatsAppMessageService.getTextMessageInput(
-      process.env.RECIPIENT_WAID,
+      '5535997373718',
+      // this.configService.get<string>('RECIPIENT_WAID'),
     );
 
     this.whatsAppMessageService
@@ -51,7 +54,7 @@ export class PurchaseService {
       })
       .catch((error) => console.log('did not work: ', error));
 
-    this.cronTaskService.addCronJob('Billing message', testingDueDate);
+    //this.cronTaskService.addCronJob('Billing message', testingDueDate);
 
     const client = await this.clientsService.findOne(clientId);
 

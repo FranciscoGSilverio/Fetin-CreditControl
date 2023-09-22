@@ -2,6 +2,7 @@ import { Table } from "reactstrap";
 
 import { BsCheck, BsFillTrashFill } from "react-icons/bs";
 import { BiErrorCircle } from "react-icons/bi";
+import { RiAlarmWarningLine } from "react-icons/ri";
 
 import { formatDate } from "../../utils/formatDate";
 import { Client } from "../../types/client";
@@ -55,6 +56,12 @@ const ClientesTable = ({ data, openModal }: TableProps) => {
       <tbody>
         {data &&
           data.map((client) => {
+            const isDue = client.purchases?.some(
+              (purchase) => new Date(purchase.dueDate) < new Date()
+            );
+
+            console.log("isDue", isDue);
+
             const { day, month, year } = formatDate(client.createdAt);
             const formatedDate = `${day}/${month}/${year}`;
 
@@ -69,7 +76,9 @@ const ClientesTable = ({ data, openModal }: TableProps) => {
                 <td>{formatedDate}</td>
                 <td>{client.purchases?.length || 0}</td>
                 <td>
-                  {client.isPaymentPending ? (
+                  {isDue ? (
+                    <RiAlarmWarningLine size={25} className="text-danger" />
+                  ) : client.isPaymentPending ? (
                     <BiErrorCircle size={25} className="text-warning mx-1" />
                   ) : (
                     <BsCheck size={25} className="text-success mx-1" />

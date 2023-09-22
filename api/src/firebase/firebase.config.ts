@@ -1,5 +1,4 @@
 import * as firebase from 'firebase-admin';
-import privateKey from './../assets/privateKey.json';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDLnTWjWlA2Ui-ORReRhCd7d5K1cIu3ZtE',

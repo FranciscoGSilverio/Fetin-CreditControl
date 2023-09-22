@@ -3,12 +3,14 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CronTaskService {
   constructor(
     private schedulerRegistry: SchedulerRegistry,
     private readonly whatsAppMessageService: WhatsappMessageService,
+    private readonly configService: ConfigService,
   ) {}
 
   private readonly logger = new Logger(CronTaskService.name);
@@ -16,7 +18,8 @@ export class CronTaskService {
   addCronJob(name: string, billingDate: Date) {
     const job = new CronJob(billingDate, () => {
       const messageContent = this.whatsAppMessageService.getTextMessageInput(
-        process.env.RECIPIENT_WAID,
+        '5535997373718',
+        // this.configService.get<string>('RECIPIENT_WAID'),
       );
 
       this.whatsAppMessageService

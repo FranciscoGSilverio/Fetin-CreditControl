@@ -62,6 +62,7 @@ const PurchasesForm = () => {
     },
     onSuccess: () => {
       resetRFIDtag();
+      queryClient.invalidateQueries("pendingPurchases");
       queryClient.invalidateQueries("clients");
       openModal(
         true,

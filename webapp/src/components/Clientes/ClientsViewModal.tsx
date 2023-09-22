@@ -4,6 +4,8 @@ import Modal from "react-bootstrap/Modal";
 import { FiUser, FiShoppingCart } from "react-icons/fi";
 import { MdAttachMoney, MdOutlineDownloadDone } from "react-icons/md";
 import { BsCalendar, BsCalendarX, BsWhatsapp } from "react-icons/bs";
+import { FaCircle } from "react-icons/fa";
+import { RiAlarmWarningLine } from "react-icons/ri";
 
 import DefaultCard from "../Common/DefaultCard";
 import { formatDate } from "../../utils/formatDate";
@@ -23,9 +25,20 @@ const ClientsViewModal = ({
   closeModal,
   client,
 }: ClientsViewModalProps) => {
+  const formatDates = (date: Date) => {
+    const { day, month, year } = formatDate(date);
+    return `${day}/${month}/${year}`;
+  };
+
   const handleClose = () => closeModal();
 
-  const clientPaymentStatus = client?.isPaymentPending
+  const isDue = client?.purchases?.some(
+    (purchase) => new Date(purchase.dueDate) < new Date()
+  );
+
+  const clientPaymentStatus = isDue
+    ? "Pagamento atrasado"
+    : client?.isPaymentPending
     ? "Pagamento pendente"
     : "Nenhum pagamento pendente";
 
@@ -43,15 +56,28 @@ const ClientsViewModal = ({
             <FiUser size={30} className="text-muted mx-3" />
             <span>{client?.name || ""}</span>
           </div>
-          <span>{clientPaymentStatus}</span>
+
+          <div className="d-flex align-items-center">
+            {isDue && <RiAlarmWarningLine size={25} className='mx-2 pb-1'/>}
+
+            <span className={`${isDue && "fw-bold"}`}>
+              {clientPaymentStatus}
+            </span>
+          </div>
         </div>
 
         <div className="d-flex flex-wrap align-items-center justify-content-around my-3">
           {client?.purchases?.map((purchase: Purchase) => {
-            const paymentStatus = purchase.isPending ? "Pendente" : "Pago";
+            const duePurchase = new Date(purchase.dueDate) < new Date();
 
-            const { day, month, year } = formatDate(purchase.createdAt);
-            const formatedPurchaseDate = `${day}/${month}/${year}`;
+            const paymentStatus = duePurchase
+              ? "Atrasado"
+              : purchase.isPending
+              ? "Pendente"
+              : "Pago";
+
+            const formatedPurchaseDate = formatDates(purchase.createdAt);
+            const formatedDueDate = formatDates(purchase.dueDate);
 
             return (
               <div className="my-2" key={purchase.purchaseId}>
@@ -71,6 +97,10 @@ const ClientsViewModal = ({
                       </div>
 
                       <div className="d-flex align-items-center my-2">
+                        {duePurchase && (
+                          <FaCircle size={10} className="text-danger" />
+                        )}
+
                         <MdOutlineDownloadDone
                           size={25}
                           className="text-muted"
@@ -89,7 +119,7 @@ const ClientsViewModal = ({
                       <div className="d-flex ">
                         <BsCalendarX size={25} className="mx-1 text-muted" />
                         <span className="d-flex align-items-center mx-2">
-                          Data de vencimento: {formatedPurchaseDate}
+                          Data de vencimento: {formatedDueDate}
                         </span>
                       </div>
                     </DefaultCard>
