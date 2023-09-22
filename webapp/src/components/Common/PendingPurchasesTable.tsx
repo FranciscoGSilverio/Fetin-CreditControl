@@ -1,6 +1,7 @@
 import { Table } from "reactstrap";
 
 import { BsFillTrashFill, BsFillCreditCard2BackFill } from "react-icons/bs";
+import { RiAlarmWarningLine } from "react-icons/ri";
 
 import { formatDate } from "../../utils/formatDate";
 import { Purchase } from "../../types/purchase";
@@ -66,9 +67,21 @@ const PendingPurchasesTable = ({ data, openModal }: TableProps) => {
             const formatedBuyDate = `${day}/${month}/${year}`;
             const formatedLatestPaymentDate = `${latestPaymentDay}/${latestPaymentMonth}/${latestPaymentYear}`;
 
+            const isDue = new Date(purchase.dueDate) < new Date();
+
             return (
               <tr key={purchase.purchaseId} style={{ cursor: "pointer" }}>
-                <td>{purchase.productName}</td>
+                <td>
+                  <span className="d-flex align-items-center">
+                    {purchase.productName}
+                    {isDue && (
+                      <RiAlarmWarningLine
+                        size={23}
+                        className=" text-danger mx-2 pb-1"
+                      />
+                    )}
+                  </span>
+                </td>
                 <td>{purchase.price}</td>
                 <td>{purchase.quantity}</td>
                 <td>{formatedBuyDate}</td>

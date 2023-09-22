@@ -33,7 +33,7 @@ const ClientsViewModal = ({
   const handleClose = () => closeModal();
 
   const isDue = client?.purchases?.some(
-    (purchase) => new Date(purchase.dueDate) < new Date()
+    (purchase) => new Date(purchase.dueDate) < new Date() && purchase.isPending
   );
 
   const clientPaymentStatus = isDue
@@ -58,7 +58,7 @@ const ClientsViewModal = ({
           </div>
 
           <div className="d-flex align-items-center">
-            {isDue && <RiAlarmWarningLine size={25} className='mx-2 pb-1'/>}
+            {isDue && <RiAlarmWarningLine size={25} className="mx-2 pb-1" />}
 
             <span className={`${isDue && "fw-bold"}`}>
               {clientPaymentStatus}

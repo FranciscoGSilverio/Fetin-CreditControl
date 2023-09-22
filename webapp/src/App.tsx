@@ -23,7 +23,7 @@ function App() {
       {isAuthenticated ? (
         <>
           <Navbar />
-          <Container style={{ paddingTop: "10px" }}>
+          <Container style={{ paddingTop: "30px" }}>
             <Routes>
               <Route path="/" element={<PaginaDashboard />} />
               <Route path="/clientes" element={<PaginaClientes />} />

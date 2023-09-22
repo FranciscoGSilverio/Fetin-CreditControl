@@ -57,7 +57,8 @@ const ClientesTable = ({ data, openModal }: TableProps) => {
         {data &&
           data.map((client) => {
             const isDue = client.purchases?.some(
-              (purchase) => new Date(purchase.dueDate) < new Date()
+              (purchase) =>
+                new Date(purchase.dueDate) < new Date() && purchase.isPending
             );
 
             console.log("isDue", isDue);
