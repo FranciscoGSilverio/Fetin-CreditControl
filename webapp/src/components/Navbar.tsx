@@ -10,7 +10,6 @@ import {
   DropdownItem,
 } from "reactstrap";
 import { useAuth } from "../hooks/useAuth";
-import { HiOutlineLogout } from "react-icons/hi";
 import { signOutUser } from "../utils/auth/emailAndPasswordLogin";
 
 const Nav = styled.nav`
@@ -24,7 +23,7 @@ const Nav = styled.nav`
   left: 0;
   display: flex;
   align-items: center;
-  border-bottom: 0.6px solid #577186;
+  border-bottom: 1px solid rgba(87, 113, 134, 0.2);
 `;
 
 const NavTitle = styled.a`

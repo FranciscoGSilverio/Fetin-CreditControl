@@ -35,6 +35,7 @@ const PaginaDashboard = () => {
   );
 
   if (isLoading || !dashboardData) return <></>;
+
   return (
     <>
       <div className="d-flex" style={{ height: "150px" }}>
@@ -42,7 +43,7 @@ const PaginaDashboard = () => {
           <DashboardTopCard
             icon={1}
             title={"Pagamentos pendentes"}
-            value={dashboardData.totalClientsInDebt}
+            value={dashboardData?.pendingPurchases?.length || 0}
           />
         </DashboardTopCardContainer>
         <DashboardTopCardContainer>

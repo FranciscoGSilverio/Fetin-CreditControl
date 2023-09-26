@@ -136,7 +136,7 @@ const ClientsViewModal = ({
         </Button>
         <Button
           variant="outline-success"
-          onClick={() => sendWhatsappMessage(client.whatsAppNumber)}
+          onClick={() => sendWhatsappMessage(client.whatsAppNumber, client)}
         >
           <div className="d-flex align-items-center">
             <BsWhatsapp style={{ marginRight: "10px" }} size={15} />
