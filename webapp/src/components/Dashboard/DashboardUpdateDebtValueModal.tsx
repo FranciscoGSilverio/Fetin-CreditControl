@@ -92,12 +92,24 @@ const DashboardUpdateDebtValueModal = ({
           dueDate: formattedDueDate,
           discountValue: null,
         }}
-        onSubmit={(values) =>
+        onSubmit={(values) => {
+          const currentDiscoundValue = values?.discountValue
+            ? values.discountValue
+            : 0;
+
+          if (currentDiscoundValue > purchase?.debtValue) {
+            return openResultModal(
+              false,
+              "Ops!",
+              "O valor a ser descontado não pode ser maior que o valor da dívida"
+            );
+          }
+
           updateDebtValue({
             purchaseId: values.purchaseId,
             value: values.discountValue,
-          })
-        }
+          });
+        }}
       >
         {() => (
           <Form>

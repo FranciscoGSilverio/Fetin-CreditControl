@@ -61,8 +61,6 @@ const ClientesTable = ({ data, openModal }: TableProps) => {
                 new Date(purchase.dueDate) < new Date() && purchase.isPending
             );
 
-            console.log("isDue", isDue);
-
             const { day, month, year } = formatDate(client.createdAt);
             const formatedDate = `${day}/${month}/${year}`;
 

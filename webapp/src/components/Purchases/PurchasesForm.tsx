@@ -91,7 +91,7 @@ const PurchasesForm = () => {
       }}
       onSubmit={(values, { resetForm }) => {
         fetchRFIDtag().then(({ data: tag }) => {
-          if (tag?.Tag === '0' || tag === '0') {
+          if (tag?.Tag === "0" || tag === "0") {
             openModal(
               false,
               "Erro ao criar compra!",
@@ -116,6 +116,7 @@ const PurchasesForm = () => {
               id="productName"
               name="productName"
               placeholder="Iphone 14 pro..."
+              required
             />
           </div>
 
@@ -129,6 +130,7 @@ const PurchasesForm = () => {
               id="clientId"
               name="clientId"
               placeholder="Iphone 14 pro..."
+              required
             >
               <option value="" hidden className="text-muted">
                 Selecione um cliente
@@ -145,7 +147,7 @@ const PurchasesForm = () => {
           <div className="d-flex mb-3">
             <div className="d-flex flex-column col-sm-6 px-3">
               <label htmlFor="price" className="form-label">
-                Preço
+                Preço*
               </label>
               <Field
                 type="number"
@@ -153,6 +155,7 @@ const PurchasesForm = () => {
                 id="price"
                 name="price"
                 placeholder="R$"
+                required
               />
             </div>
             <div className="d-flex flex-column col-sm-6 px-3">
@@ -182,13 +185,14 @@ const PurchasesForm = () => {
             </div>
             <div className="d-flex flex-column col-sm-6 px-3">
               <label htmlFor="dueDate" className="form-label">
-                Data de vencimento
+                Data de vencimento*
               </label>
               <Field
                 type="date"
                 className="form-control"
                 id="dueDate"
                 name="dueDate"
+                required
               />
             </div>
           </div>

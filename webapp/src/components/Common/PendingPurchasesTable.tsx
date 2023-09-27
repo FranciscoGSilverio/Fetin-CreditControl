@@ -6,9 +6,10 @@ import { RiAlarmWarningLine } from "react-icons/ri";
 import { formatDate } from "../../utils/formatDate";
 import { Purchase } from "../../types/purchase";
 
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient, useQuery } from "react-query";
 import axios from "axios";
 import { openModal as openResultModal } from "./SweetAlerts";
+import { Client } from "../../types/client";
 
 type TableProps = {
   data: Purchase[];
@@ -19,6 +20,12 @@ const PendingPurchasesTable = ({ data, openModal }: TableProps) => {
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const queryClient = useQueryClient();
+
+  const { data: clients } = useQuery("clients", async () => {
+    const { data } = await axios.get(`${apiUrl}/clients`);
+
+    return data;
+  });
 
   const { mutate: deletePurchase } = useMutation({
     mutationFn: (clientId: string) =>
@@ -48,7 +55,7 @@ const PendingPurchasesTable = ({ data, openModal }: TableProps) => {
           <th>Preço</th>
           <th>Quantidade</th>
           <th>Data da compra</th>
-          <th>Data do último pagamento</th>
+          <th>Data de vencimento</th>
           <th>Valor pendente</th>
           <th>Cliente</th>
           <th></th>
@@ -57,15 +64,20 @@ const PendingPurchasesTable = ({ data, openModal }: TableProps) => {
       <tbody>
         {data &&
           data.map((purchase) => {
+            const currentClient = clients?.find(
+              (client: Client) => client.clientId === purchase.clientId
+            );
+
             const { day, month, year } = formatDate(purchase.createdAt);
+
             const {
-              day: latestPaymentDay,
-              month: latestPaymentMonth,
-              year: latestPaymentYear,
-            } = formatDate(purchase.latestPaymentDate);
+              day: dueDay,
+              month: dueMonth,
+              year: dueYear,
+            } = formatDate(purchase.dueDate);
 
             const formatedBuyDate = `${day}/${month}/${year}`;
-            const formatedLatestPaymentDate = `${latestPaymentDay}/${latestPaymentMonth}/${latestPaymentYear}`;
+            const formatedDueDate = `${dueDay}/${dueMonth}/${dueYear}`;
 
             const isDue = new Date(purchase.dueDate) < new Date();
 
@@ -85,9 +97,9 @@ const PendingPurchasesTable = ({ data, openModal }: TableProps) => {
                 <td>{purchase.price}</td>
                 <td>{purchase.quantity}</td>
                 <td>{formatedBuyDate}</td>
-                <td>{formatedLatestPaymentDate}</td>
+                <td>{formatedDueDate}</td>
                 <td>{purchase.debtValue}</td>
-                <td>--</td>
+                <td>{currentClient?.name || "--"}</td>
                 <td>
                   <div className="d-flex align-items-center">
                     <BsFillCreditCard2BackFill
