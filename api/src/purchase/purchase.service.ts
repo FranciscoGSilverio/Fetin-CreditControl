@@ -10,7 +10,8 @@ import { Repository } from 'typeorm';
 import { ClientsService } from 'src/clients/clients.service';
 import { CronTaskService } from 'src/cron-task/cron-task.service';
 import { WhatsappMessageService } from 'src/whatsapp-message/whatsapp-message.service';
-import { ConfigService } from '@nestjs/config';
+
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class PurchaseService {
@@ -20,7 +21,6 @@ export class PurchaseService {
     private readonly clientsService: ClientsService,
     private readonly cronTaskService: CronTaskService,
     private readonly whatsAppMessageService: WhatsappMessageService,
-    private readonly configService: ConfigService,
   ) {}
 
   async create(createPurchaseDto: CreatePurchaseDto) {
@@ -34,7 +34,6 @@ export class PurchaseService {
       createdAt: new Date(Date.now()),
     };
 
-    // console.log('newPurchase', newPurchase);
     const purchase = this.purchaseRepository.create(newPurchase);
 
     const now = Date.now();
@@ -42,10 +41,8 @@ export class PurchaseService {
     //10 seconds from now
     const testingDueDate = new Date(now + 10000);
 
-    const messageContent = this.whatsAppMessageService.getTextMessageInput(
-      '5535997373718',
-      // this.configService.get<string>('RECIPIENT_WAID'),
-    );
+    const messageContent =
+      this.whatsAppMessageService.getTextMessageInput('5535997373718');
 
     this.whatsAppMessageService
       .sendMessage(messageContent)
@@ -54,7 +51,7 @@ export class PurchaseService {
       })
       .catch((error) => console.log('did not work: ', error));
 
-    //this.cronTaskService.addCronJob('Billing message', testingDueDate);
+    this.cronTaskService.addCronJob(uuid(), testingDueDate);
 
     const client = await this.clientsService.findOne(clientId);
 

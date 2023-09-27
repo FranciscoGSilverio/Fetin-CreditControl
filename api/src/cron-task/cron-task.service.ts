@@ -19,7 +19,6 @@ export class CronTaskService {
     const job = new CronJob(billingDate, () => {
       const messageContent = this.whatsAppMessageService.getTextMessageInput(
         '5535997373718',
-        // this.configService.get<string>('RECIPIENT_WAID'),
       );
 
       this.whatsAppMessageService
