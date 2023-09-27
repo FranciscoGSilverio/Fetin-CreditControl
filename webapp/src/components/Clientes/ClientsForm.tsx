@@ -53,19 +53,20 @@ const ClientsForm = () => {
         resetForm();
       }}
     >
-      {() => (
+      {({ setFieldValue }) => (
         <>
           <Form>
             <div className="d-flex mb-3">
               <div className="d-flex flex-column col-sm-6 px-3">
                 <label htmlFor=" name" className="form-label">
-                  Nome completo
+                  Nome*
                 </label>
                 <Field
                   type="text"
                   className="form-control"
                   id="name"
                   name="name"
+                  required
                 />
               </div>
               <div className="d-flex flex-column col-sm-6 px-3">
@@ -91,17 +92,22 @@ const ClientsForm = () => {
                   className="form-control"
                   id="email"
                   name="email"
+                  onChange={(event: any) => {
+                    const email = event.target.value.toLowerCase();
+                    setFieldValue("email", email);
+                  }}
                 />
               </div>
               <div className="d-flex flex-column col-sm-6 px-3">
                 <label htmlFor="whatsAppNumber" className="form-label">
-                  Número de WhatsApp
+                  Número de WhatsApp*
                 </label>
                 <Field
                   type="text"
                   className="form-control"
                   id="whatsAppNumber"
                   name="whatsAppNumber"
+                  required
                 />
                 <div id="emailHelp" className="form-text">
                   *Número usado somente para contato referente aos prazos das
