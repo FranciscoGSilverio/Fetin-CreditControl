@@ -10,9 +10,7 @@ export class WhatsappMessageService {
     // const phoneNumberId = this.configService.get<string>('PHONE_NUMBER_ID');
     const phoneNumberId = '103739842783863';
 
-    const accessToken =
-      'EAApo4Rg5i9wBOZBmWarWYyxDsLOvkeSuetbL0jvkinXvMjl1B98hxTEMTCGGQAIozS8m2pgobxqoFZCa6W2OBXAPrZBfFCshZC6fzbQlRDb2Kofl0BSGHVHZCQZA7lYI6CnE8UqxLL7bTGIVoeAAkGQOJX5CpTTL5UzfsOnlH0K7m4xDX7Jz5jGqLA9eIFtZBBdLFvsDPq3WSEse4IVEte543Jkrnar6MbcFcAZD';
-
+    const accessToken ='EAApo4Rg5i9wBOy0yZBX8fSpGvgnfsmgZBxmGWRkmJua5Fot7LgEs32NWjU3zsbZAZB347ZBHzlAcfjJKnhbm2OxrG1cEj653tgrEZCZCwwz0ZBCfY2hFZAIsPKX8INeK8oZBglY1pKiBhOmaw6juaaZApx5a2R56UYxC7yX08C1ZCv6TJGFQJdw2bZAZC6m6Fn5cflreHwOuhqZAnzLYZBKaq8qgppGG3QZA9wWQTns2LcnYZD'
     const config = {
       method: 'POST',
       url: `https://graph.facebook.com/${version}/${phoneNumberId}/messages`,

@@ -11,6 +11,7 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import ClientsForm from "../components/Clientes/ClientsForm";
 import { Client } from "../types/client";
+import ClientsPhoneEditModal from "../components/Clientes/ClientsPhoneEditModal";
 
 const PaginaClientes = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -25,6 +26,7 @@ const PaginaClientes = () => {
   });
 
   const [clientsView, setClientsView] = useState(false);
+  const [clientsPhoneEditView, setClientsPhoneEditView] = useState(false);
   const [currentClientId, setCurrentClientId] = useState("");
 
   const currentClient = clientsData?.find(
@@ -54,12 +56,22 @@ const PaginaClientes = () => {
               setCurrentClientId(clientId);
               setClientsView(true);
             }}
+            openPhoneEditModal={(clientId: string) => {
+              setCurrentClientId(clientId);
+              setClientsPhoneEditView(true);
+            }}
           />
         </CardBody>
       </DefaultCard>
       <ClientsViewModal
         state={clientsView}
         closeModal={() => setClientsView(false)}
+        client={currentClient}
+      />
+
+      <ClientsPhoneEditModal
+        state={clientsPhoneEditView}
+        closeModal={() => setClientsPhoneEditView(false)}
         client={currentClient}
       />
 

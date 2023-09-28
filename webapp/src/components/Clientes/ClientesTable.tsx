@@ -10,13 +10,15 @@ import { Client } from "../../types/client";
 import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
 import { openModal as openResultModal } from "../Common/SweetAlerts";
+import { BsFillTelephonePlusFill } from "react-icons/bs";
 
 type TableProps = {
   data: Client[];
   openModal: (clientId: string) => void;
+  openPhoneEditModal: (clientId: string) => void;
 };
 
-const ClientesTable = ({ data, openModal }: TableProps) => {
+const ClientesTable = ({ data, openModal, openPhoneEditModal }: TableProps) => {
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const queryClient = useQueryClient();
@@ -46,6 +48,7 @@ const ClientesTable = ({ data, openModal }: TableProps) => {
       <thead>
         <tr>
           <th>Nome</th>
+          <th>Número de WhatsApp</th>
           <th>Email</th>
           <th>Cliente desde</th>
           <th>Compras efetuadas</th>
@@ -61,6 +64,9 @@ const ClientesTable = ({ data, openModal }: TableProps) => {
                 new Date(purchase.dueDate) < new Date() && purchase.isPending
             );
 
+            const capitalizedName =
+              client.name.charAt(0).toUpperCase() + client.name.slice(1);
+
             const { day, month, year } = formatDate(client.createdAt);
             const formatedDate = `${day}/${month}/${year}`;
 
@@ -70,7 +76,8 @@ const ClientesTable = ({ data, openModal }: TableProps) => {
                 style={{ cursor: "pointer" }}
                 onClick={() => openModal(client.clientId)}
               >
-                <td>{client.name}</td>
+                <td>{capitalizedName}</td>
+                <td>{client.whatsAppNumber}</td>
                 <td>{client.email}</td>
                 <td>{formatedDate}</td>
                 <td>{client.purchases?.length || 0}</td>
@@ -84,6 +91,14 @@ const ClientesTable = ({ data, openModal }: TableProps) => {
                   )}
                 </td>
                 <td>
+                  <BsFillTelephonePlusFill
+                    size={22}
+                    className=" mx-1"
+                    onClick={(event: React.MouseEvent<HTMLElement>) => {
+                      event.stopPropagation();
+                      openPhoneEditModal(client.clientId);
+                    }}
+                  />
                   <BsFillTrashFill
                     size={22}
                     className="text-danger mx-1"
